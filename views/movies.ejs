@@ -1,0 +1,15 @@
+<% title = 'Movies' %>
+<section>
+    <h2>Now Showing</h2>
+    <ul>
+        <% movies.forEach(function(movie) { %>
+            <li>
+                <h3><%= movie.title %></h3>
+                <p><%= movie.description %></p>
+                <p><strong>Genre:</strong> <%= movie.genre %></p>
+                <p><strong>Duration:</strong> <%= movie.duration %> mins</p>
+            </li>
+        <% }) %>
+    </ul>
+</section>
+

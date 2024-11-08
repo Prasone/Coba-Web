@@ -1,0 +1,16 @@
+<% title = 'Schedule' %>
+<section>
+    <h2>Movie Schedule</h2>
+    <p>Here is the schedule for movie screenings.</p>
+    <ul>
+        <% schedule.forEach(function(schedule) { %>
+            <li>
+                <h3><%= schedule.movie_id %></h3>
+                <p><%= schedule.theater_id %></p>
+                <p><strong>Studio:</strong> <%= schedule.studio %></p>
+                <p><strong>Show Time:</strong> <%= schedule.show_time %></p>
+            </li>
+        <% }) %>
+    </ul>
+</section>
+
