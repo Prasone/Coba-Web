@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <title>Daftar Film</title> -->
+    <% title = 'Dashboard' %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Daftar Film</h1>
+        <table class="table table-bordered mt-4">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Genre</th>
+                    <th>Duration</th>
+                    <th>Release Date</th>
+                    <th>Rating</th>
+                    <th>Poster</th>
+                    <th>Actions</th> <!-- Kolom baru untuk aksi edit -->
+                </tr>
+            </thead>
+            <tbody>
+                <% movies.forEach((movie, index) => { %>
+                <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= movie.title %></td>
+                    <td><%= movie.description %></td>
+                    <td><%= movie.genre %></td>
+                    <td><%= movie.duration %> mins</td>
+                    <td><%= movie.release_date %></td>
+                    <td><%= movie.rating %></td>
+                    <td>
+                        <% if (movie.poster) { %>
+                            <img src="/uploads/<%= movie.poster %>" alt="Poster" width="100">
+                        <% } else { %>
+                            No Image
+                        <% } %>
+                    </td>
+                    <td class="d-flex align-items-center gap-2">
+                        <a href="/edit_film/<%= movie.id %>" class="btn btn-warning btn-sm">Edit</a>
+                        <button class="btn btn-danger btn-sm delete-btn" data-id="<%= movie.id %>">Delete</button>
+                    </td>
+                    
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <a href="/logout" class="btn btn-primary">logout</a>
+        <a href="/add_movie" class="btn btn-primary">Tambah Data</a>
+        <a href="/data-bioskop" class="btn btn-primary">Data Bioskop</a>     
+    </div>
+    <br>
+    <script src="/js/data.js"></script>
+</body>
+</html>

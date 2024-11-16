@@ -11,6 +11,12 @@
 
 .navbar {
     visibility: hidden;
+    margin-top: -15%;
+}
+
+.logo {
+    height: auto;
+    width: 50%;
 }
 
 body {
@@ -39,7 +45,7 @@ main img {
     padding: 32px;
     background-color: white;
     border-radius: 10px;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
     overflow: auto;
 }
 
@@ -67,30 +73,16 @@ main img {
     cursor: pointer;
 }
 
-.pop-up-modal {
-    position: fixed;
-    padding: 8px 32px;
-    background-color: #cc0000;
-    color: white;
-    bottom: -100px;
-    opacity: 0;
-    text-transform: capitalize;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    border-radius: 10px;
-    text-align: center;
-    transition: bottom ease-in-out 0.3s, opacity ease-in-out 0.3s;
+#buttonClose {
+    margin-right: 2%;
 }
 
-.pop-up-modal h2 {
-    padding: 6px;
+.error-notification {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
 }
 
-.pop-up-modal p {
-    font-size: 14px;
-    margin-bottom: 6px;
-}
-
-.pop-up-modal.display {
-    bottom: 32px;
-    opacity: 1;
-}

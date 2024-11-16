@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Bioskop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="text-center">Daftar Bioskop</h1>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Location</th>
+                    <th>City</th>
+                    <th>Contact</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% theaters.forEach(function(theater) { %>
+                    <tr>
+                        <td><%= theater.id %></td>
+                        <td><%= theater.name %></td>
+                        <td><%= theater.location %></td>
+                        <td><%= theater.city %></td>
+                        <td><%= theater.contact %></td>
+                        <td>
+                            <a href="/edit_bioskop/<%= theater.id %>" class="btn btn-warning btn-sm">Edit</a>
+                            <form action="/delete_bioskop/<%= theater.id %>" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus bioskop ini?');">
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
+                            
+                        </td>    
+                                        
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+        <a href="/logout" class="btn btn-primary">logout</a>
+        <a href="/add_bioskop" class="btn btn-primary">Tambah Bioskop</a>
+        <a href="/data" class="btn btn-primary">Data Film</a>
+    </div>
+    <br>
+    <script src="/js/edit_bioskop.js"></script>
+</body>
+</html>

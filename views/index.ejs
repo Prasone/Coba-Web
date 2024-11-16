@@ -1,6 +1,39 @@
-<% title = 'Home' %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <% title = 'Home' %>
+    <!-- Link ke file CSS -->
+    <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+    <section>
+        <h2>Now Showing</h2>
+        <div class="movie-slider">
+            <div class="movie-slider-wrapper">
+                <ul class="movie-list">
+                    <% movies.forEach(function(movie) { %>
+                        <li class="movie-item">
+                            <div class="movie">
+                                <% if (movie.poster) { %>
+                                    <!-- Bungkus gambar dengan link ke halaman schedule -->
+                                    <a href="/schedule">
+                                        <img src="/uploads/<%= movie.poster %>" alt="Poster" class="movie-poster">
+                                    </a>
+                                <% } else { %>
+                                    No Image
+                                <% } %>
+                            </div>
+                        </li>
+                    <% }) %>
+                </ul>
+            </div>
+        </div>
+        
+    </section>
 
-<section>
-    <h2>Welcome to Our Cinema</h2>
-    <p>Explore the latest movies and schedules.</p>
-</section>
+    <!-- Script JS di bawah body -->
+    <script src="/js/index.js"></script>
+</body>
+</html>

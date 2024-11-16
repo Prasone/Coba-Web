@@ -1,0 +1,24 @@
+let currentIndex = 0;
+const movieList = document.querySelector('.movie-list');
+const movieItems = document.querySelectorAll('.movie-item'); // Pastikan .movie-item terdeteksi
+const totalMovies = movieItems.length;
+
+function slideMovies() {
+    // Jika sudah di akhir, kembali ke awal tanpa transisi
+    if (currentIndex >= totalMovies) {
+        currentIndex = 0;
+        movieList.style.transition = 'none'; // Nonaktifkan transisi untuk reset posisi
+        movieList.style.transform = `translateX(0px)`; // Pindahkan kembali ke awal
+        setTimeout(() => {
+            movieList.style.transition = 'transform 0.5s ease-in-out'; // Aktifkan kembali transisi
+        }, 50); // Tunggu sejenak agar transisi kembali aktif
+    } else {
+        const offset = -currentIndex * (movieItems[0].offsetWidth + 20); // 20 adalah jarak antar film
+        movieList.style.transform = `translateX(${offset}px)`; // Geser movie list ke kiri
+    }
+
+    currentIndex++;
+}
+
+// Panggil fungsi slide setiap 3 detik
+setInterval(slideMovies, 3000);

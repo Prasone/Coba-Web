@@ -1,0 +1,59 @@
+/* Container untuk movie-slider */
+.movie-slider {
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+    width: 57%; /* Sesuaikan lebar slider sesuai kebutuhan */
+    border-radius: 8px;  /* Menambahkan sudut melengkung */
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.2); /* Efek bayangan */
+    z-index: 10; /* Agar slider berada di atas konten lainnya */
+    margin-left: 25%; /* Geser slider ke kanan menggunakan margin-left */
+}
+
+/* Gaya untuk movie list */
+.movie-list {
+    display: flex;
+    transition: transform 0.5s ease-in-out; /* Transisi untuk pergerakan */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 4px; /* Menambahkan jarak konsisten antar item */
+}
+
+/* Gaya untuk setiap item film */
+.movie-item {
+    flex: 0 0 auto;  /* Mengatur lebar item agar tetap */
+    text-align: center;
+}
+
+/* Menetapkan ukuran poster secara konsisten */
+.movie-poster {
+    width: 100%;   /* Membuat lebar poster mengikuti lebar item */
+    height: auto;  /* Sesuaikan tinggi dengan lebar */
+    max-width: 300px;  /* Maksimumkan lebar poster */
+    height: 400px; /* Setel tinggi poster agar tetap konsisten */
+    object-fit: cover; /* Menjaga gambar tetap proporsional tanpa distorsi */
+    border-radius: 8px; /* Opsional: Menambahkan sudut melengkung pada poster */
+}
+
+/* Gaya untuk judul film */
+h3 {
+    font-size: 18px;
+    margin-top: 10px;
+}
+
+/* Responsif, agar tampilan film menyesuaikan lebar layar */
+@media (max-width: 768px) {
+    .movie-slider {
+        width: 90%; /* Lebar slider untuk layar kecil */
+    }
+
+    .movie-poster {
+        max-width: 150px; /* Sesuaikan ukuran poster untuk layar kecil */
+        height: 200px; /* Sesuaikan tinggi poster untuk layar kecil */
+    }
+
+    h3 {
+        font-size: 16px;
+    }
+}

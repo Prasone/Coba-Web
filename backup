@@ -1,15 +1,35 @@
 const express = require('express');
 const mysql = require('mysql2');
 const path = require('path');
+const session = require('express-session');
+const bcrypt = require('bcryptjs');
 const ejsLayouts = require('express-ejs-layouts');
+const { title } = require('process');
 
 const app = express();
 
 // Set up EJS as the view engine and use express-ejs-layouts for layout support
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set("views","views")
 app.use(express.static('public'));
+// app.use(express.static(path.join(__dirname, 'public')));
 app.use(ejsLayouts);
+
+// Middleware untuk parsing data formulir
+app.use(express.urlencoded({ extended: true }));
+
+// **Middleware untuk session, letakkan di sini**
+app.use(session({
+    secret: 'kelompok5',
+    resave: false,
+    saveUninitialized: true
+}));
+
+// Middleware untuk menambahkan user ke setiap tampilan
+app.use((req, res, next) => {
+    res.locals.user = req.session.user;  // Menyimpan user di res.locals
+    next();
+});
 
 // MySQL Database Connection
 const db = mysql.createConnection({
@@ -24,8 +44,27 @@ db.connect((err) => {
     console.log('Connected to the cinema database.');
 });
 
+// function isAdmin(req, res, next) {
+//     if (req.session.user && req.session.user.role === 'admin') {
+//         next();
+//     } else {
+//         res.status(403).send('Access denied. Admins only.');
+//     }
+// }
+
 // Route for home page
-app.get('/', (req, res) => res.render('index', { title: 'Home' }));
+// app.get('/', (req, res) => res.render('index', { title: 'Home'}));
+// Contoh rute untuk home page
+app.get('/', (req, res) => {
+    res.render('index', { title: 'Home', user: req.session.user });
+});
+
+// Contoh rute login
+app.get('/login', (req, res) => {
+    res.render('login', { title: 'Login Page', user: req.session.user });
+}); 
+
+app.get('/daftar', (req,res) => res.render('daftar', {title : " Register Page"}))
 
 // Route for movies page
 app.get('/movies', (req, res) => {
@@ -54,6 +93,69 @@ app.get('/schedule', (req, res) => {
     });
 });
 
+//register
+app.post('/register', async (req, res) => {
+    const { username, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 8);
+
+    db.query('SELECT * FROM users WHERE username = ?', [username], (err, results) => {
+        if (err) throw err;
+
+        if (results.length > 0) {
+            return res.render('daftar', { title: 'register Page', error: 'Username already exists. Please choose a different username.' });
+            
+        }
+
+        db.query('INSERT INTO users (username, password) VALUES (?, ?)', [username, hashedPassword,'user' ], (err) => {
+            if (err) throw err;
+            res.redirect('/login');
+        });
+    });
+});
+
+//login
+app.post('/login', (req, res) => {
+    const { username, password } = req.body;
+
+    db.query('SELECT * FROM users WHERE username = ?', [username], async (err, results) => {
+        if (err) throw err;
+        if (results.length > 0) {
+            const user = results[0];
+            const isMatch = await bcrypt.compare(password, user.password);
+
+            if (isMatch) {
+                req.session.user = user;
+                if (user.role === 'admin') {
+                    console.log('Admin logged in:', user.username);
+                } else {
+                    console.log('User logged in:', user.username);
+                }
+                if (user.role === 'admin') {
+                    return res.redirect('/admin-dashboard'); // Halaman khusus admin
+                } else {
+
+                    return res.redirect('/'); // Halaman user biasa
+                }
+            } else {
+                // send messagge error if wrong password or username
+                res.render('login', { title: 'Login Page', error: 'Invalid username or password' });
+            }
+        } else {
+            // send messagge error if user not found
+            res.render('login', { title: 'Login Page', error: 'User not found' });
+        }
+    });
+});
+
+// Logout route
+app.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).send("Error logging out.");
+        }
+        res.redirect('/'); // Redirect ke halaman utama setelah logout
+    });
+});
 
 // Start the server
 app.listen(3000, () => console.log('Server running on http://localhost:3000'));

@@ -12,25 +12,25 @@
 <body>
 <main>
     <header>
-        <img src="public/images/logo1.png" alt="Logo">
+        <img class="logo" src="images/logo1.png" alt="Logo">
     </header>
-    <!-- Todo 1: Ubah div menjadi form  -->
-    <form id="loginForm" class="login-input">
-        <label for="inputEmail">Email</label>
-        <!-- todo 2 : ubah type menjadi email -->
-        <input id="inputEmail" type="email" required>
+    <form action="/login" method="POST" id="loginForm" class="login-input">
+        <label for="inputUsername">Username</label>
+        <input id="inputUsername" type="text" name="username" required>
         <label for="inputPassword">Password</label>
-        <!-- todo 3 : ubah type menjadi password-->
-        <input id="inputPassword" type="password" required>
-        <!-- todo 4 : tambha type submit pada button login-->
-        <button id="buttonLogin" type="submit">Login</button>
+        <input id="inputPassword" type="password" name="password" required>
+        <a href="/daftar">daftar</a>
+        <button type="submit">Login</button>
         <button id="buttonClose" onclick="window.location.href='/'">Close</button>
     </form>
+    
 </main>
-<div id="modal" class="pop-up-modal">
-    <h2>Login gagal!</h2>
-    <p>Silakan coba lagi</p>
-</div>
+
+<% if (typeof error !== 'undefined') { %>
+    <div class="error-notification">
+        <p><%= error %></p>
+    </div>
+<% } %>
 
 
 </body>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/movies">Movies</a>
+            <a href="/logout">Logout</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Welcome, <%= user.username %></h1>
+        <h2>Movies Management</h2>
+
+        <!-- Menampilkan daftar film -->
+        <section>
+            <h3>Now Showing</h3>
+            <ul>
+                <a href="">dashboard</a>
+            </ul>
+        </section>
+
+        <!-- Tombol untuk menambah film -->
+        <section>
+            <a href="/add-movie">Add New Movie</a>
+        </section>
+    </main>
+</body>
+</html>

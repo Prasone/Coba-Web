@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <% title = 'Add movie' %>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QFqcZscmfOsmfsKmMBjAA9K7I9wq7i0cKZqz8EqI5ZxDQJrR0Jg3IACesl5iyS6" crossorigin="anonymous">
+</head>
+<body>
+    <div class="container">
+        <h2 class="mt-3">Form Upload Foto</h2>
+
+        <!-- Notifikasi -->
+        <div id="notif" class="alert alert-success d-none" role="alert"></div>
+
+        <!-- Form dengan ID uploadForm -->
+        <form id="uploadForm" action="/tambah" method="post" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="genre" class="form-label">Genre</label>
+                <input type="text" class="form-control" id="genre" name="genre"  required>
+            </div>
+            <div class="mb-3">
+                <label for="duration" class="form-label">Duration (minutes)</label>
+                <input type="number" class="form-control" id="duration" name="duration"  required>
+            </div>
+            <div class="mb-3">
+                <label for="release_date" class="form-label">Release Date</label>
+                <input type="date" class="form-control" id="release_date" name="release_date"  required>
+            </div>
+            <div class="mb-3">
+                <label for="rating" class="form-label">Rating</label>
+                <input type="number" step="0.1" class="form-control" id="rating" name="rating"  required>
+            </div>
+            <input type="file" name="poster" accept="image/*" required>
+            <br>
+            <button type="submit" class="btn btn-success mt-3">Add Movie</button>
+            <a href="/data" class="btn btn-secondary mt-3">Cancel</a>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="/js/edit_movie.js"></script>
+</body>
+</html>

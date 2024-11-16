@@ -1,16 +1,33 @@
-<% title = 'Schedule' %>
-<section>
-    <h2>Movie Schedule</h2>
-    <p>Here is the schedule for movie screenings.</p>
-    <ul>
-        <% schedule.forEach(function(schedule) { %>
-            <li>
-                <h3><%= schedule.movie_id %></h3>
-                <p><%= schedule.theater_id %></p>
-                <p><strong>Studio:</strong> <%= schedule.studio %></p>
-                <p><strong>Show Time:</strong> <%= schedule.show_time %></p>
-            </li>
-        <% }) %>
-    </ul>
-</section>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <% title = 'Movie Schedule' %>
+</head>
+<body>
+    <section>
+        <h2>Movie Schedule</h2>
+        <form action="/schedule" method="get">
+            <label for="city">Select City:</label>
+            <select name="city" id="city" onchange="this.form.submit()">
+                <option value="">All Cities</option>
+                <option value="Jakarta" <%= city === 'Jakarta' ? 'selected' : '' %>>Jakarta</option>
+                <option value="Bekasi" <%= city === 'Bekasi' ? 'selected' : '' %>>Bekasi</option>
+            </select>
+        </form>
+
+        <ul>
+            <% theaters.forEach(function(theater) { %>
+                <li>
+                    <h3><%= theater.name %></h3>
+                    <p><strong>Address:</strong> <%= theater.location %></p>
+                    <p><strong>Contact:</strong> <%= theater.contact %></p>
+                    <a href="https://www.google.com/maps/search/<%= encodeURIComponent(theater.location) %>" target="_blank">View on Google Maps</a>
+                </li>
+            <% }) %>
+        </ul>
+    </section>
+</body>
+</html>
 
