@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <% title = 'Add Coming Soon Movie' %>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Add New Coming Soon Movie</h1>
+        <div id="notif" class="alert alert-success d-none" role="alert"></div>
+        <form action="/add_coming_soon" method="POST" enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" name="title" id="title" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="genre" class="form-label">Genre</label>
+                <input type="text" name="genre" id="genre" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="release_date" class="form-label">Release Date</label>
+                <input type="date" name="release_date" id="release_date" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="poster" class="form-label">Poster</label>
+                <input type="file" name="poster" id="poster" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Add Coming Soon Movie</button>
+            <a href="/coming_soon" class="btn btn-secondary">Back</a>
+        </form>
+    </div>
+    <script src="/js/edit_comingsoon.js"></script>
+</body>
+</html>

@@ -1,33 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <% title = 'Movie Schedule' %>
+  <% title = 'Movie Schedule' %>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+<link rel="stylesheet" href="/css/schedule.css">
 </head>
 <body>
-    <section>
-        <h2>Movie Schedule</h2>
-        <form action="/schedule" method="get">
-            <label for="city">Select City:</label>
-            <select name="city" id="city" onchange="this.form.submit()">
-                <option value="">All Cities</option>
-                <option value="Jakarta" <%= city === 'Jakarta' ? 'selected' : '' %>>Jakarta</option>
-                <option value="Bekasi" <%= city === 'Bekasi' ? 'selected' : '' %>>Bekasi</option>
-            </select>
-        </form>
+  <div class="header">
+    <div class="header-schedule">
+      <i class="fas fa-calendar-alt"></i> SCHEDULE
+    </div>
+  </div>
 
-        <ul>
-            <% theaters.forEach(function(theater) { %>
-                <li>
-                    <h3><%= theater.name %></h3>
-                    <p><strong>Address:</strong> <%= theater.location %></p>
-                    <p><strong>Contact:</strong> <%= theater.contact %></p>
-                    <a href="https://www.google.com/maps/search/<%= encodeURIComponent(theater.location) %>" target="_blank">View on Google Maps</a>
-                </li>
-            <% }) %>
-        </ul>
-    </section>
+  <div class="container-schedule">
+    <% movies.forEach(movie => { %>
+    <div class="movie-header">
+        <a href="/schedule_film/<%= movie.id %>">
+            <img src="/uploads/<%= movie.poster %>" alt="Poster" class="movie-poster">
+        </a>
+      <div class="movie-details">
+        <div class="movie-title">
+          <%= movie.title %>
+        </div>
+        <div class="movie-genre">
+          <%= movie.genre %>
+        </div>
+        <div class="movie-duration">
+          Duration: <%= movie.duration %> mins
+        </div>
+      </div>
+    </div>
+    <div class="date-selector">
+      <% movie.dates.forEach(date => { %>
+        <div class="date-item">
+          <div class="date-weekday"><%= date.weekday %></div>
+          <div class="date-day"><%= date.day %></div>
+        </div>
+      <% }); %>
+    </div>
+    <% }); %>
+  </div>
+  
 </body>
 </html>
-

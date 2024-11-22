@@ -1,0 +1,90 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: white;
+    color: #333;
+}
+.header {
+    background-color: #F5F5F5;
+    padding: 10px 0;
+    text-align: center;
+}
+.container-schedule {
+    padding: 20px;
+}
+.header .header-schedule {
+    font-size: 28px;
+    font-weight: bold;
+    color: #f5b642; /* Color for the text "SCHEDULE" */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.header .header-schedule i {
+    margin-right: 10px; /* Space between the icon and text */
+    color: #001A40; /* Color for the calendar icon */
+}
+.container-movie {
+    padding: 20px;
+}
+.movie-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px; /* Adjust the margin to create space between movies */
+}
+.movie-header img {
+    width: 100px;
+    height: 150px;
+    border-radius: 10px;
+}
+.movie-details {
+    margin-left: 20px;
+}
+.movie-title {
+    font-size: 24px;
+    font-weight: bold;
+}
+.movie-genre {
+    font-size: 16px;
+    color: #555;
+}
+.movie-duration {
+    font-size: 14px;
+    color: #777;
+    margin-top: 5px;
+}
+.date-selector {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0px;
+    padding: 0px 0;
+    background-color: #001A40;
+    border-bottom: 1px solid #ccc;
+}
+.date-selector div {
+    text-align: center;
+    color: #FFF;
+    width: 100px;
+    margin: 0 5px;
+    padding: 5px 0;
+}
+.date-selector .active {
+    background-color: #f5b642;
+    color: white;
+    border-radius: 5px;
+}
+
+.date-weekday {
+    font-size: 14px;
+    font-weight: bold;
+    text-transform: capitalize;
+    margin-bottom: 2px; /* Kurangi jarak bawah */
+    line-height: 1; /* Atur tinggi garis untuk merapatkan teks */
+  }
+  
+  .date-day {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 0; /* Hilangkan jarak atas */
+    line-height: 1; /* Atur tinggi garis */
+  }

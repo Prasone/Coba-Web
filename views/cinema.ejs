@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <% title = 'Cinema' %>
+</head>
+<body>
+    <section>
+        <h2>Movie Schedule</h2>
+        <form action="/cinema" method="get">
+            <label for="city">Select City:</label>
+            <select name="city" id="city" onchange="this.form.submit()">
+                <option value="">All Cities</option>
+                <option value="Jakarta" <%= city === 'Jakarta' ? 'selected' : '' %>>Jakarta</option>
+                <option value="Bekasi" <%= city === 'Bekasi' ? 'selected' : '' %>>Bekasi</option>
+            </select>
+        </form>
+
+        <ul>
+            <% theaters.forEach(function(theater) { %>
+                <li>
+                    <h3><%= theater.name %></h3>
+                    <p><strong>Address:</strong> <%= theater.location %></p>
+                    <p><strong>Contact:</strong> <%= theater.contact %></p>
+                    <a href="https://www.google.com/maps/search/<%= encodeURIComponent(theater.location) %>" target="_blank">View on Google Maps</a>
+                </li>
+            <% }) %>
+        </ul>
+    </section>
+</body>
+</html>
+

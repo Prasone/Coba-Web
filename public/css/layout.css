@@ -1,20 +1,79 @@
-        /* Make the whole page a flex container */
-        html, body {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-        }
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
 
-        main {
-            flex-grow: 1; /* Allow main content to take up remaining space */
-        }
+.navbar {
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    border-bottom: 1px solid #ccc;
+    padding: 5px 5px;
+    position: relative;
+}
 
-        footer {
-            background-color: #f8f9fa;
-            text-align: center;
-            padding: 10px 0;
-            width: 100%;
-            position: relative;
-            bottom: 0;
-        }
+.nav-item {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+    text-align: center; 
+    margin: 10px; 
+}
+
+.nav-item i {
+    font-size: 24px; 
+    margin-bottom: 5px; 
+}
+
+.nav-item a {
+    text-decoration: none; 
+    color: #333; 
+    font-size: 14px; 
+}
+
+.login-btn {
+    background: linear-gradient(to right, #F5B642, #F5D142);
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    color: #001A40;
+    font-weight: bold;
+    cursor: pointer;
+}
+.logout-btn {
+    background: linear-gradient(to right, #e91212, #e91212);
+    border: none;
+    border-radius: 20px;
+    padding: 10px 20px;
+    color: #001A40;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #001A40;
+}
+
+.logo span {
+    color: #F5B642;
+}
+
+main {
+    flex-grow: 1; 
+}
+
+footer {
+    background-color: #f8f9fa;
+    text-align: center;
+    padding: 10px 0;
+    width: 100%;
+    position: relative;
+    bottom: 0;
+}
+
+
+

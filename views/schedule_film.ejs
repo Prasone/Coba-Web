@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <% title = 'Movie Schedule' %>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="/css/schedule_film.css">
+</head>
+<body>
+<!-- Navbar with Schedule heading -->
+<div class="header">
+    <div class="header-schedule">
+        <i class="fas fa-calendar-alt"></i> SCHEDULE
+    </div>
+</div>
+
+<div class="container-schedule">
+    <!-- Movie Information -->
+    <div class="movie-header">
+        <img src="/uploads/<%= movie.poster %>" alt="Poster" class="poster-img">
+        <div class="movie-details">
+            <div class="movie-title"><%= movie.title %></div>
+            <div class="movie-genre"><%= movie.genre %></div>
+            <div class="movie-duration">Duration: <%= movie.duration %> mins</div>
+        </div>
+    </div>
+
+    <!-- City filter button with dropdown -->
+    <div class="filter-button">
+        <div class="dropdown">
+            <button onclick="toggleDropdown()">
+                City
+                <i class="fas fa-chevron-down"></i>
+            </button>
+            <div class="dropdown-content">
+                <a href="#" onclick="filterCity('All')">All</a> <!-- Added All option -->
+                <a href="#" onclick="filterCity('Jakarta')">Jakarta</a>
+                <a href="#" onclick="filterCity('Bekasi')">Bekasi</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Date Selector -->
+    <div class="date-selector">
+        <% 
+            // Mengurutkan tanggal berdasarkan data dari database
+            const sortedDates = Object.keys(schedules).sort((a, b) => new Date(a) - new Date(b));
+        %>
+        <% sortedDates.forEach((date) => { %>
+            <div>
+                <!-- Tampilkan nama hari (contoh: Mon, Tue, dll) -->
+                <%= new Date(date).toLocaleDateString('en-US', { weekday: 'short' }) %>
+                <br/>
+                <!-- Tampilkan tanggal (contoh: 22) -->
+                <%= new Date(date).getDate() %>
+            </div>
+        <% }); %>
+    </div>
+    
+
+    <!-- Theater List -->
+    <div class="schedule-container" id="theater-list">
+        <h3 class="bold-text"> <span id="city-name">All Theaters</span></h3>
+        <% 
+            const uniqueTheaters = new Set();
+            Object.keys(schedules).forEach(date => {
+                schedules[date].forEach(schedule => {
+                    uniqueTheaters.add(JSON.stringify({
+                        name: schedule.theater_name,
+                        id: schedule.theater_id,
+                        city: schedule.city
+                    }));
+                });
+            });
+        %>
+    
+        <% Array.from(uniqueTheaters).forEach(theater => { 
+            const theaterData = JSON.parse(theater); 
+        %>
+            <div class="schedule-item theater-item" data-city="<%= theaterData.city %>">
+                <p>Bioskop: <a href="/theater/<%= theaterData.id %>"><%= theaterData.name %></a> </p>
+            </div>
+        <% }); %>
+    </div>
+
+    <script>
+        // Function to toggle dropdown visibility
+        function toggleDropdown() {
+            var dropdown = document.querySelector('.dropdown');
+            dropdown.classList.toggle('active');
+        }
+    
+        // Function to filter theaters based on selected city
+        function filterCity(city) {
+            // Variable to hold the content for the city name
+            var content;
+    
+            // Determine the content based on the selected city
+            if (city === 'All') {
+                content = 'All Theaters';
+            } else {
+                content = 'Theaters in ' + city;
+            }
+    
+            // Update the city name in the <span> element
+            document.getElementById('city-name').textContent = content;
+    
+            // Filter the theaters based on the selected city
+            var theaterItems = document.querySelectorAll('.theater-item');
+            theaterItems.forEach(function(item) {
+                if (item.dataset.city === city || city === 'All') {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+    </script>
+    
+
+</body>
+</html>

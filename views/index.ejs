@@ -3,13 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <% title = 'Home' %>
+
     <!-- Link ke file CSS -->
     <link rel="stylesheet" href="/css/index.css">
 </head>
 <body>
-    <section>
+    <div class="Countainer-banner">
+        <div class="carousel">
+            <div class="slides">
+                <div class="slide">
+                    <img src="/banner/Cihuy bank.jpg" alt="Slide 1">
+                </div>
+                <div class="slide">
+                    <img src="/banner/payza.jpg" alt="Slide 2">
+                </div>
+                <div class="slide">
+                    <img src="/banner/ZapPay.jpg" alt="Slide 3">
+                </div>
+            </div>
+            <button class="prev" onclick="prevSlide()">&#10094;</button>
+            <button class="next" onclick="nextSlide()">&#10095;</button>
+        </div>
+    </div>
+
+    <div class="section-title">
         <h2>Now Showing</h2>
+    </div>
+
+    <section>
         <div class="movie-slider">
             <div class="movie-slider-wrapper">
                 <ul class="movie-list">
@@ -18,7 +41,7 @@
                             <div class="movie">
                                 <% if (movie.poster) { %>
                                     <!-- Bungkus gambar dengan link ke halaman schedule -->
-                                    <a href="/schedule">
+                                    <a href="/schedule_film/<%= movie.id %>">
                                         <img src="/uploads/<%= movie.poster %>" alt="Poster" class="movie-poster">
                                     </a>
                                 <% } else { %>
@@ -30,8 +53,28 @@
                 </ul>
             </div>
         </div>
-        
     </section>
+
+    <div class="section-title">
+        <h2>Coming Soon</h2>
+    </div>
+
+    <div class="coming-soon-container">
+        <ul class="coming-soon">
+            <% comingSoon.forEach(function(comingSoon) { %>
+                <li class="coming-item">
+                    <div class="movie">
+                        <% if (comingSoon.poster) { %>
+                            <!-- Bungkus gambar dengan link ke halaman schedule -->
+                                <img src="/uploads/<%= comingSoon.poster %>" alt="Poster" class="coming-poster">
+                        <% } else { %>
+                            No Image
+                        <% } %>
+                    </div>
+                </li>
+            <% }) %>
+        </ul>
+    </div>
 
     <!-- Script JS di bawah body -->
     <script src="/js/index.js"></script>
