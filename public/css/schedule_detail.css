@@ -1,0 +1,103 @@
+
+/* Global Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f8f8;
+    color: #333;
+}
+
+/* Navbar */
+.header {
+    background-color: #001A40;
+    padding: 10px 0;
+    text-align: center;
+}
+.header .schedule-heading {
+    font-size: 28px;
+    font-weight: bold;
+    color: #f5b642;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.header .schedule-heading i {
+    margin-right: 10px;
+    color: #F5F5F5;
+}
+
+/* Cinema Name */
+.cinema-name {
+    font-size: 24px;
+    font-weight: bold;
+    color: #001A40;
+    padding: 15px 20px;
+    background-color: #f5f5f5;
+    text-align: left;
+    border-bottom: 2px solid #ddd;
+}
+
+/* Main Content */
+.content {
+    padding: 20px;
+}
+
+.movie {
+    display: flex;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.movie img {
+    width: 100px;
+    height: 150px;
+    border-radius: 8px;
+}
+
+.movie-title {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.movie-genre, .movie-duration {
+    color: #666;
+}
+
+.movie-schedule {
+    margin-top: 10px;
+}
+
+.movie-schedule span {
+    background-color: #001A40;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+/* Date Selector */
+.date-selector {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.date-selector div {
+    text-align: center;
+    padding: 10px 15px;
+    background-color: #f5f5f5;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.date-selector .active {
+    background-color: #f5b642;
+    color: white;
+}
+
