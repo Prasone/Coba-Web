@@ -19,6 +19,7 @@
             <th>Genre</th>
             <th>Release Date</th>
             <th>Poster</th>
+            <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -35,6 +36,12 @@
                 No Image
                 <% } %>
             </td>
+            <td>
+                <a href="/edit_comingsoon/<%= comingsoon.id %>" class="btn btn-warning btn-sm">Edit</a>
+                <form action="/delete_comingsoon/<%= comingsoon.id %>" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?');">
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>                            
+            </td>
             </tr>
             <% }); %>
         </tbody>
@@ -44,6 +51,7 @@
     <a href="/add_coming_soon" class="btn btn-primary">Tambah Data</a>
     <a href="/data-bioskop" class="btn btn-primary">Data Bioskop</a> 
     <a href="/data" class="btn btn-primary ">Data Film</a>
+    <a href="/data_schedules" class="btn btn-primary">Data schedules</a>  
     </div>
 
     <br>

@@ -1,6 +1,14 @@
 <% title = 'Movies' %>
 <link rel="stylesheet" href="/css/movie.css">
-<section class="now-showing">
+
+<div class="header">
+    <div class="header-schedule">
+      <i class="fas fa-film"></i> Movie
+    </div>
+  </div>
+
+
+  <section class="now-showing">
     <h2>Now Playing</h2>
     <div class="movies-list">
         <% movies.forEach(function(movie) { %>
@@ -21,6 +29,30 @@
                     </div>
                     <p><strong>Genre:</strong> <%= movie.genre %></p>
                     <p><strong>Duration:</strong> <%= movie.duration %> mins</p>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+</section>
+
+<!-- Coming Soon Section -->
+<section class="coming-soon">
+    <h2>Coming Soon</h2>
+    <div class="movies-list">
+        <% comingSoonMovies.forEach(function(movie) { %>
+            <div class="movie-item">
+                <a href="/schedule" class="movie-link">
+                    <div class="movie-poster">
+                        <% if (movie.poster) { %>
+                            <img src="/uploads/<%= movie.poster %>" alt="Poster" class="poster-img">
+                        <% } else { %>
+                            <div class="no-image">No Image</div>
+                        <% } %>
+                    </div>
+                </a>
+                <div class="movie-info">
+                    <h3><%= movie.title %></h3>
+                    <p><strong>Genre:</strong> <%= movie.genre %></p>
                 </div>
             </div>
         <% }) %>

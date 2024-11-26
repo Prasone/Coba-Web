@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (params.get('success') === 'true') {
         const notif = document.getElementById('notif');
         if (notif) { // Pastikan elemen notif ada di DOM
-            notif.textContent = 'Bioskop berhasil ditambahkan!';
+            notif.textContent = 'Data berhasil ditambahkan!';
             notif.classList.remove('d-none');
         }
     }

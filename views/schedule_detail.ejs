@@ -1,0 +1,61 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <% title = 'Detail Schedule' %>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/schedule_detail.css">
+</head>
+<body>
+    <!-- Navbar with Schedule heading -->
+    <div class="header">
+        <div class="schedule-heading">
+            <i class="fas fa-calendar-alt"></i> SCHEDULE
+        </div>
+    </div>
+
+    <!-- Cinema Name -->
+    <div class="cinema-name"><%= theaterName %></div>
+
+<!-- Date Selector -->
+<div class="date-selector">
+    <% dates.forEach(date => { %>
+        <div 
+            class="date-option" 
+            onclick="filterSchedules('<%= date.original %>', this)">
+            <%= date.formatted %>
+        </div>
+    <% }) %>
+</div>
+
+<!-- Movies -->
+<div id="movies-list">
+    <% if (schedules.length > 0) { %>
+        <% schedules.forEach(schedule => { %>
+            <div class="movie" data-date="<%= new Date(schedule.date).toLocaleDateString('en-GB') %>">
+                <img src="/uploads/<%= schedule.movie_poster %>" alt="<%= schedule.movie_title %>">
+                <div class="movie-details">
+                    <div class="movie-title"><%= schedule.movie_title %></div>
+                    <div class="movie-genre"><%= schedule.genre %></div>
+                    <div class="movie-duration">Duration: <%= schedule.duration %> mins</div>
+                    <div class="movie-schedule">
+                        <% if (schedule.showtimes) { %>
+                            <% schedule.showtimes.split(',').forEach(time => { %>
+                                <span><%= time.trim() %></span>
+                            <% }) %>
+                        <% } else { %>
+                            <span>No showtimes available</span>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    <% } else { %>
+        <div>No schedules available for this theater.</div>
+    <% } %>
+</div>
+<script src="/js/schedule_detail.js"></script>
+</body>
+</html>

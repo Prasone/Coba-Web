@@ -1,35 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= title %></title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <% title = 'Admin Dashboard' %>
 </head>
 <body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2>Admin Panel</h2>
+    <ul>
+      <li><a href="/data">Data Film</a></li>
+      <li><a href="/data-bioskop">Data Bioskop</a></li>
+      <li><a href="/coming_soon">Data Coming Soon</a></li>
+      <li><a href="/data_schedules">Data Schedule</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
     <header>
-        <nav>
-            <a href="/dashboard">Dashboard</a>
-            <a href="/movies">Movies</a>
-            <a href="/logout">Logout</a>
-        </nav>
+      <h2>Dashboard</h2>
+      <div class="user-wrapper">
+        <img src="/uploads/user-avatar.png" alt="Admin Profile" width="40" height="40">
+        <div>
+          <h4>Admin</h4>
+          <small>Logged in</small>
+        </div>
+      </div>
     </header>
 
     <main>
-        <h1>Welcome, <%= user.username %></h1>
-        <h2>Movies Management</h2>
+      <div class="cards">
+        <div class="card">
+          <h3>Data Film</h3>
+          <p>Total: <%= moviesCount %> Films</p>
+        </div>
+        <div class="card">
+          <h3>Data Bioskop</h3>
+          <p>Total: <%= theatersCount %> Theaters</p>
+        </div>
+        <div class="card">
+          <h3>Coming Soon</h3>
+          <p>Total: <%= comingSoonCount %> Films</p>
+        </div>
+        <div class="card">
+          <h3>Data Schedule</h3>
+          <p>Total: <%= schedulesCount %> Schedules</p>
+        </div>
+      </div>
 
-        <!-- Menampilkan daftar film -->
-        <section>
-            <h3>Now Showing</h3>
-            <ul>
-                <a href="">dashboard</a>
-            </ul>
-        </section>
-
-        <!-- Tombol untuk menambah film -->
-        <section>
-            <a href="/add-movie">Add New Movie</a>
-        </section>
+      <div class="charts">
+        <div class="chart">
+          <h3>Monthly Recap Report</h3>
+          <canvas id="myChart"></canvas>
+        </div>
+      </div>
     </main>
+  </div>
+
+  <script src="/js/chart.min.js"></script>
+  <script src="/js/tes.js"></script>
 </body>
 </html>

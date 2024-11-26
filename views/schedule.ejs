@@ -12,34 +12,53 @@
     </div>
   </div>
 
-  <div class="container-schedule">
-    <% movies.forEach(movie => { %>
-    <div class="movie-header">
-        <a href="/schedule_film/<%= movie.id %>">
-            <img src="/uploads/<%= movie.poster %>" alt="Poster" class="movie-poster">
-        </a>
-      <div class="movie-details">
-        <div class="movie-title">
-          <%= movie.title %>
-        </div>
-        <div class="movie-genre">
-          <%= movie.genre %>
-        </div>
-        <div class="movie-duration">
-          Duration: <%= movie.duration %> mins
-        </div>
-      </div>
+ <!-- Filter Section -->
+ <div class="filter-section">
+  <label for="city-select">Pick your Theater!</label>
+  <select id="city-select" onchange="filterCity()">
+      <option value="All" <%= city === 'All' ? 'selected' : '' %>>All</option>
+      <option value="Jakarta" <%= city === 'Jakarta' ? 'selected' : '' %>>Jakarta</option>
+      <option value="Bekasi" <%= city === 'Bekasi' ? 'selected' : '' %>>Bekasi</option>
+      <option value="Depok" <%= city === 'Depok' ? 'selected' : '' %>>Depok</option>
+  </select>
+</div>
+
+
+  <!-- Theater List -->
+  <div class="theater-list-container">
+    <h3 class="theater-header">
+        <% if (city === 'All') { %>
+            All Theaters
+        <% } else { %>
+            Theaters in <span id="city-name"><%= city %></span>
+        <% } %>
+    </h3>
+    <div class="theaters" id="theater-list">
+        <% if (theaters.length > 0) { %>
+            <% theaters.forEach(theater => { %>
+              <div class="theater-card" onclick="redirectToScheduleDetail('<%= theater.name %>')">
+                    <i class="fas fa-film"></i>
+                    <div class="theater-name"><%= theater.name %></div>
+                    <div class="theater-location"><%= theater.location %></div>
+                </div>
+            <% }) %>
+        <% } else { %>
+            <div>No theaters found in <%= city === 'All' ? 'any city' : city %>.</div>
+        <% } %>
     </div>
-    <div class="date-selector">
-      <% movie.dates.forEach(date => { %>
-        <div class="date-item">
-          <div class="date-weekday"><%= date.weekday %></div>
-          <div class="date-day"><%= date.day %></div>
-        </div>
-      <% }); %>
-    </div>
-    <% }); %>
-  </div>
-  
+</div>
+
+<script>
+  function filterCity() {
+      const city = document.getElementById('city-select').value;
+      window.location.href = `/schedule?city=${city}`;
+  }
+
+    function redirectToScheduleDetail(theaterName) {
+        const encodedName = encodeURIComponent(theaterName); // Untuk menangani karakter khusus
+        window.location.href = `/schedule_detail?theater=${encodedName}`;
+    }
+
+</script>
 </body>
 </html>

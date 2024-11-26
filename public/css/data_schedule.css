@@ -1,0 +1,48 @@
+
+        /* CSS untuk memperkecil input pencarian dan tombol */
+        .search-form {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            font-size: 14px;
+            padding: 5px 10px;
+        }
+
+        .search-button {
+            font-size: 14px;
+            padding: 6px 15px;
+        }
+
+        /* Gaya tabel agar lebih rapi */
+        table.table {
+            font-size: 14px; /* Perkecil ukuran font di tabel */
+        }
+
+        table.table th, 
+        table.table td {
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        /* Button size customization */
+        .btn-sm {
+            font-size: 12px;
+        }
+
+        /* Center align pagination */
+        .pagination {
+            margin-top: 20px;
+        }
+
+        /* Responsive container for smaller screens */
+        @media (max-width: 768px) {
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                margin-bottom: 10px;
+            }
+        }
+

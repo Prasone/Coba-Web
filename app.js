@@ -96,133 +96,151 @@ app.get('/login', (req, res) => {
 app.get('/daftar', (req,res) => res.render('daftar', {title : " Register Page"}))
 
 // Route for movies page
+// Route for movies page
 app.get('/movies', (req, res) => {
-    const query = 'SELECT * FROM movies'; // Replace with your actual table name
-    db.query(query, (err, results) => {
+    const queryNowPlaying = 'SELECT * FROM movies'; // Query for movies that are currently playing
+    const queryComingSoon = 'SELECT * FROM comingsoon'; // Query for movies coming soon
+    
+    db.query(queryNowPlaying, (err, nowPlayingMovies) => {
         if (err) {
             console.error(err);
             res.status(500).send("Error retrieving movies from database");
-        } else {
-            res.render('movies', { title: 'Movies', movies: results });
-        }
-    });
-});
-
-// app.get('/schedule', (req,res) => res.render('schedule', {title : " Schedule Page"}))
-app.get('/schedule', (req, res) => {
-    const query = `
-      SELECT 
-        movies.id AS movie_id, 
-        movies.title, 
-        movies.genre, 
-        movies.duration, 
-        movies.poster,
-        schedules.date
-      FROM 
-        movies
-      JOIN 
-        schedules 
-      ON 
-        movies.id = schedules.movie_id
-      WHERE 
-        movies.release_date <= CURDATE()
-      ORDER BY 
-        movies.id, schedules.date
-    `;
-  
-    db.query(query, (err, results) => {
-        if (err) {
-            console.error('Error executing query:', err);
-            res.status(500).send('Internal Server Error');
             return;
         }
-
-        // Kelompokkan data berdasarkan film
-        const movies = results.reduce((acc, row) => {
-            const movie = acc.find(m => m.id === row.movie_id);
-            const dateObj = new Date(row.date);
-            const weekday = dateObj.toLocaleDateString('en-US', { weekday: 'short' }); // Nama hari
-            const day = dateObj.getDate(); // Tanggal
-            
-            if (movie) {
-                const formattedDate = { weekday, day };
-                if (!movie.dates.find(d => d.weekday === weekday && d.day === day)) {
-                    movie.dates.push(formattedDate);
-                }
-            } else {
-                acc.push({
-                    id: row.movie_id,
-                    title: row.title,
-                    genre: row.genre,
-                    duration: row.duration,
-                    poster: row.poster,
-                    dates: [{ weekday, day }]
-                });
+        
+        db.query(queryComingSoon, (err, comingSoonMovies) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send("Error retrieving coming soon movies from database");
+                return;
             }
-            return acc;
-        }, []);
-
-        res.render('schedule', { movies });
-    });
-});
-
-app.get('/schedule_film/:id', (req, res) => {
-    const movieId = req.params.id;
-    const movieQuery = `SELECT * FROM movies WHERE id = ?`;
-    const scheduleQuery = `
-        SELECT schedules.date, theaters.name AS theater_name, theaters.id AS theater_id, theaters.city
-        FROM schedules
-        JOIN theaters ON schedules.theater_id = theaters.id
-        WHERE schedules.movie_id = ?
-        ORDER BY schedules.date ASC, theaters.name ASC
-    `;
-
-    db.query(movieQuery, [movieId], (err, movieResult) => {
-        if (err) throw err;
-
-        // Jika film tidak ditemukan, tampilkan error
-        if (!movieResult.length) {
-            return res.status(404).send('Movie not found');
-        }
-
-        const movieData = movieResult[0];
-
-        db.query(scheduleQuery, [movieId], (err, scheduleResults) => {
-            if (err) throw err;
-
-            const groupedSchedules = scheduleResults.reduce((acc, schedule) => {
-                const date = schedule.date;
-                if (!acc[date]) acc[date] = [];
-                acc[date].push(schedule);
-                return acc;
-            }, {});
-
-            res.render('schedule_film', { 
-                movie: movieData,
-                schedules: groupedSchedules 
+            
+            res.render('movies', { 
+                title: 'Movies',
+                movies: nowPlayingMovies,
+                comingSoonMovies: comingSoonMovies 
             });
         });
     });
 });
 
 
+// Route for schedule page
+app.get('/schedule', (req, res) => {
+    const city = req.query.city || 'All'; // Default city is All
+    let query;
+    let queryParams = [];
+
+    if (city === 'All') {
+        query = `SELECT * FROM theaters`;
+    } else {
+        query = `SELECT * FROM theaters WHERE city = ?`;
+        queryParams = [city];
+    }
+
+    db.query(query, queryParams, (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            return res.status(500).send('Internal Server Error');
+        }
+        res.render('schedule', { theaters: results, city });
+    });
+});
+
+// Route for schedule detail page
+app.get('/schedule_detail', (req, res) => {
+    const theaterName = req.query.theater;
+
+    if (!theaterName) {
+        return res.status(400).send('Theater name is required');
+    }
+
+    const query = `
+        SELECT 
+            movies.title AS movie_title, 
+            movies.poster AS movie_poster, 
+            movies.genre AS genre, 
+            movies.duration AS duration, 
+            schedules.date, 
+            GROUP_CONCAT(DISTINCT schedules.time ORDER BY schedules.time) AS showtimes, 
+            theaters.name AS theater_name 
+        FROM schedules 
+        JOIN theaters ON schedules.theater_id = theaters.id 
+        JOIN movies ON schedules.movie_id = movies.id 
+        WHERE theaters.name = ? 
+        GROUP BY movies.id, schedules.date, theaters.name
+        ORDER BY schedules.date ASC;
+    `;
+
+    db.query(query, [theaterName], (err, results) => {
+        if (err) {
+            console.error('Error executing query:', err);
+            return res.status(500).send('Internal Server Error');
+        }
+
+        // Generate unique dates and format them
+        const seenDates = new Set();
+        const dates = results
+            .map(schedule => {
+                const date = new Date(schedule.date);
+                // Format date as "dd MMMM" (e.g., "30 November")
+                const formattedDate = date.toLocaleDateString('en-GB', {
+                    day: '2-digit',
+                    month: 'long'
+                });
+                const originalDate = date.toLocaleDateString('en-GB'); // Original format "dd/mm/yyyy"
+                return { original: originalDate, formatted: formattedDate };
+            })
+            .filter(date => {
+                if (seenDates.has(date.original)) {
+                    return false; // Skip duplicate dates
+                }
+                seenDates.add(date.original);
+                return true;
+            })
+            .sort((a, b) => {
+                const dateA = new Date(a.original.split('/').reverse().join('-')); // Convert to "yyyy-mm-dd"
+                const dateB = new Date(b.original.split('/').reverse().join('-'));
+                return dateA - dateB;
+            });
+
+        res.render('schedule_detail', { theaterName, schedules: results, dates });
+    });
+});
+
+
+
 app.get('/cinema', (req, res) => {
-    const { city } = req.query;
+    const { city, search } = req.query;
 
-    // Query untuk mengambil data berdasarkan kota (jika ada)
-    const sql = city
-        ? 'SELECT * FROM theaters WHERE city = ?'
-        : 'SELECT * FROM theaters';
+    // Base SQL query
+    let sql = 'SELECT * FROM theaters WHERE 1=1';
+    const params = [];
 
-    db.query(sql, city ? [city] : [], (err, results) => {
+    // Tambahkan filter berdasarkan kota (jika ada)
+    if (city) {
+        sql += ' AND city = ?';
+        params.push(city);
+    }
+
+    // Tambahkan filter berdasarkan pencarian nama bioskop (jika ada)
+    if (search) {
+        sql += ' AND name LIKE ?';
+        params.push(`%${search}%`);
+    }
+
+    // Eksekusi query
+    db.query(sql, params, (err, results) => {
         if (err) {
             console.error('Error executing query:', err);
             return res.status(500).send('Database error');
         }
 
-        res.render('cinema', { theaters: results, city });
+        // Render halaman dengan data yang difilter
+        res.render('cinema', { theaters: results, city, search });
     });
 });
+
 
 
 //register
@@ -285,6 +303,35 @@ const storage = multer.diskStorage({
     }
 });
 const upload = multer({ storage: storage });
+
+app.get("/dashboard", (req, res) => {
+    const queries = {
+      movies: "SELECT COUNT(*) AS count FROM movies",
+      theaters: "SELECT COUNT(*) AS count FROM theaters",
+      comingSoon: "SELECT COUNT(*) AS count FROM comingsoon",
+      schedules: "SELECT COUNT(*) AS count FROM schedules"
+    };
+  
+    db.query(queries.movies, (err, movieResults) => {
+      if (err) throw err;
+      db.query(queries.theaters, (err, theaterResults) => {
+        if (err) throw err;
+        db.query(queries.comingSoon, (err, comingSoonResults) => {
+          if (err) throw err;
+          db.query(queries.schedules, (err, scheduleResults) => {
+            if (err) throw err;
+  
+            res.render("dashboard", {
+              moviesCount: movieResults[0].count,
+              theatersCount: theaterResults[0].count,
+              comingSoonCount: comingSoonResults[0].count,
+              schedulesCount: scheduleResults[0].count
+            });
+          });
+        });
+      });
+    });
+  });
 
 
 // Route untuk menampilkan data film
@@ -490,16 +537,20 @@ app.post('/delete_bioskop/:id', (req, res) => {
 app.get("/coming_soon", (req, res) => {
     const query = "SELECT * FROM comingsoon";
     db.query(query, (err, results) => {
-      if (err) throw err;
-      res.render("coming_soon", { comingsoon: results });
+        if (err) {
+            console.error('Gagal mengambil data comingsoon:', err);
+            return res.status(500).send('Terjadi kesalahan saat mengambil data.');
+        }
+        res.render("coming_soon", { comingsoon: results });
     });
-  });
-  
+});
+
+
   // Add Movie Form
-  app.get("/add_coming_soon", (req, res) => {
+app.get("/add_coming_soon", (req, res) => {
     res.render("add_coming_soon");
-  });
-  
+});
+
   // Add Movie - Handle POST Request
 app.post('/add_coming_soon', upload.single("poster"), (req, res) => {
     const { title, genre, release_date } = req.body;
@@ -507,10 +558,203 @@ app.post('/add_coming_soon', upload.single("poster"), (req, res) => {
 
     const query = "INSERT INTO comingsoon (title, genre, release_date, poster) VALUES (?, ?, ?, ?)";
     db.query(query, [title, genre, release_date, poster], (err) => {
-      if (err) throw err;
-      res.redirect("/add_coming_soon?success=true");
+        if (err) throw err;
+        res.redirect("/add_coming_soon?success=true");
     });
 });
+
+// Route untuk menampilkan form edit
+app.get('/edit_comingsoon/:id', (req, res) => {
+    const comingsoonId = req.params.id;
+    const query = 'SELECT * FROM comingsoon WHERE id = ?';
+
+    db.query(query, [comingsoonId], (err, results) => {
+        if (err) throw err;
+        if (results.length > 0) {
+            res.render('edit_coming_soon', { movie: results[0] });
+        } else {
+            res.status(404).send('Data comingsoon tidak ditemukan');
+        }
+    });
+});
+
+// Route untuk memproses update data comingsoon
+app.post('/edit_comingsoon/:id', (req, res) => {
+    const comingsoonId = req.params.id;
+    const { title, genre, release_date, poster } = req.body;
+
+    const query = 'UPDATE comingsoon SET title = ?, genre = ?, release_date = ?, poster = ? WHERE id = ?';
+    db.query(query, [title, genre, release_date, poster, comingsoonId], (err, result) => {
+        if (err) throw err;
+        console.log(`Data comingsoon dengan ID ${comingsoonId} telah diperbarui`);
+        res.redirect('/coming_soon');
+    });
+});
+
+
+// Route untuk menghapus comingsoon
+app.post('/delete_comingsoon/:id', (req, res) => {
+    const comingsoonId = req.params.id;  // Pastikan nama variabel sesuai
+    const query = 'DELETE FROM comingsoon WHERE id = ?';
+
+    db.query(query, [comingsoonId], (err, result) => {
+        if (err) {
+            console.error('Gagal menghapus data:', err);
+            return res.status(500).send('Terjadi kesalahan saat menghapus data.');
+        }
+        console.log(`Data comingsoon dengan ID ${comingsoonId} telah dihapus`);
+        res.redirect('/coming_soon');  // Kembali ke halaman daftar comingsoon setelah menghapus
+    });
+});
+
+
+// Route untuk menampilkan data schedule
+app.get('/data_schedules', (req, res) => {
+    // Ambil parameter halaman dari query string, default ke halaman 1
+    const page = parseInt(req.query.page) || 1;
+    const limit = 15; // Batasi 15 data per halaman
+    const offset = (page - 1) * limit;
+
+    // Ambil parameter pencarian `movie_id`
+    const searchMovieId = req.query.searchMovieId || '';
+
+    // Query untuk menghitung total jumlah schedule
+    let countQuery = `
+        SELECT COUNT(*) AS total FROM schedules
+        JOIN movies ON schedules.movie_id = movies.id
+        JOIN theaters ON schedules.theater_id = theaters.id
+    `;
+
+    // Query untuk mengambil data schedule berdasarkan halaman dan pencarian
+    let dataQuery = `
+        SELECT schedules.id, schedules.movie_id, theater_id ,schedules.date, schedules.time,movies.title AS movie_title, theaters.name AS theater_name
+        FROM schedules
+        JOIN movies ON schedules.movie_id = movies.id
+        JOIN theaters ON schedules.theater_id = theaters.id
+    `;
+
+    // Tambahkan kondisi pencarian jika ada `searchMovieId`
+    if (searchMovieId) {
+        countQuery += ` WHERE schedules.movie_id = '${searchMovieId}'`;
+        dataQuery += ` WHERE schedules.movie_id = '${searchMovieId}'`;
+    }
+
+    // Tambahkan limit dan offset untuk pagination
+    dataQuery += ` LIMIT ${limit} OFFSET ${offset}`;
+
+    db.query(countQuery, (err, countResults) => {
+        if (err) {
+            console.error('Gagal menghitung data:', err);
+            res.send('Terjadi kesalahan saat menghitung data.');
+        } else {
+            const totalSchedules = countResults[0].total;
+            const totalPages = Math.ceil(totalSchedules / limit);
+
+            // Query data berdasarkan pagination dan pencarian
+            db.query(dataQuery, (err, results) => {
+                if (err) {
+                    console.error('Gagal mengambil data:', err);
+                    res.send('Terjadi kesalahan saat mengambil data.');
+                } else {
+                    // Render data menggunakan template EJS dengan pagination info dan search query
+                    res.render('data_schedule', {
+                        schedules: results,
+                        currentPage: page,
+                        totalPages: totalPages,
+                        offset: offset,
+                        searchMovieId: searchMovieId
+                    });
+                }
+            });
+        }
+    });
+});
+
+// Route untuk menampilkan form penambahan schedule
+app.get('/add_schedule', (req, res) => {
+    res.render('add_schedule');
+});
+
+// Route untuk menambahkan schedule ke database
+app.post('/add_schedule', (req, res) => {
+    const { movie_id, theater_id, date } = req.body;
+
+    // Query untuk menambahkan data schedule ke database
+    const insertQuery = 'INSERT INTO schedules (movie_id, theater_id, date) VALUES (?, ?, ?)';
+    db.query(insertQuery, [movie_id, theater_id, date], (err, result) => {
+    if (err) {
+        console.error('Gagal menambahkan schedule:', err);
+        res.send('Terjadi kesalahan saat menambahkan schedule.');
+    } else {
+        res.redirect('/add_schedule?success=true');
+    }
+    });
+});
+
+// Route untuk menghapus schedule
+app.post('/delete_schedule/:id', (req, res) => {
+    const theaterId = req.params.id;
+    const query = 'DELETE FROM schedules WHERE id = ?';
+
+    db.query(query, [theaterId], (err, result) => {
+        if (err) throw err;
+        console.log(`Data Schedule denga ID ${theaterId} telah dihapus`);
+        res.redirect('/data_schedules');
+    });
+});
+
+// Route untuk menampilkan form edit schedule
+app.get('/edit_schedule/:id', (req, res) => {
+    const scheduleId = req.params.id;
+
+    // Query untuk mengambil data jadwal berdasarkan ID
+    const query = `
+        SELECT schedules.id, schedules.date, schedules.movie_id, schedules.theater_id, 
+        movies.title AS movie_title, theaters.name AS theater_name
+        FROM schedules
+        JOIN movies ON schedules.movie_id = movies.id
+        JOIN theaters ON schedules.theater_id = theaters.id
+        WHERE schedules.id = ?
+    `;
+    
+    db.query(query, [scheduleId], (err, results) => {
+        if (err) {
+            console.error('Gagal mengambil data schedule:', err);
+            res.send('Terjadi kesalahan saat mengambil data.');
+        } else {
+            const schedule = results[0];
+            
+            // Render form edit dengan data yang ada
+            res.render('edit_schedule', {
+                schedule: schedule
+            });
+        }
+    });
+});
+
+// Route untuk menangani pengeditan schedule
+app.post('/edit_schedule/:id', (req, res) => {
+    const scheduleId = req.params.id;
+    const { movie_id, theater_id, date } = req.body;
+
+    // Query untuk memperbarui jadwal berdasarkan ID
+    const query = `
+        UPDATE schedules
+        SET movie_id = ?, theater_id = ?, date = ?
+        WHERE id = ?
+    `;
+    
+    db.query(query, [movie_id, theater_id, date, scheduleId], (err, results) => {
+        if (err) {
+            console.error('Gagal mengupdate schedule:', err);
+            res.send('Terjadi kesalahan saat memperbarui data.');
+        } else {
+            res.redirect(`/data_schedules`);
+        }
+    });
+});
+
+
 
 
 // Logout route

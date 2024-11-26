@@ -1,17 +1,20 @@
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: white;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fc;
     color: #333;
 }
+
 .header {
-    background-color: #F5F5F5;
+    background-color: #001A40;
     padding: 10px 0;
     text-align: center;
 }
+
 .container-schedule {
     padding: 20px;
 }
+
 .header .header-schedule {
     font-size: 28px;
     font-weight: bold;
@@ -20,71 +23,111 @@ body {
     align-items: center;
     justify-content: center;
 }
+
 .header .header-schedule i {
     margin-right: 10px; /* Space between the icon and text */
-    color: #001A40; /* Color for the calendar icon */
-}
-.container-movie {
-    padding: 20px;
-}
-.movie-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px; /* Adjust the margin to create space between movies */
-}
-.movie-header img {
-    width: 100px;
-    height: 150px;
-    border-radius: 10px;
-}
-.movie-details {
-    margin-left: 20px;
-}
-.movie-title {
-    font-size: 24px;
-    font-weight: bold;
-}
-.movie-genre {
-    font-size: 16px;
-    color: #555;
-}
-.movie-duration {
-    font-size: 14px;
-    color: #777;
-    margin-top: 5px;
-}
-.date-selector {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0px;
-    padding: 0px 0;
-    background-color: #001A40;
-    border-bottom: 1px solid #ccc;
-}
-.date-selector div {
-    text-align: center;
-    color: #FFF;
-    width: 100px;
-    margin: 0 5px;
-    padding: 5px 0;
-}
-.date-selector .active {
-    background-color: #f5b642;
-    color: white;
-    border-radius: 5px;
+    color: #F5F5F5; /* Color for the calendar icon */
 }
 
-.date-weekday {
-    font-size: 14px;
+/* Main Content */
+.content {
+    padding: 20px;
+}
+
+.filter-section {
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.filter-section select {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #333;
     font-weight: bold;
-    text-transform: capitalize;
-    margin-bottom: 2px; /* Kurangi jarak bawah */
-    line-height: 1; /* Atur tinggi garis untuk merapatkan teks */
-  }
-  
-  .date-day {
+    border-radius: 5px;
+    background-color: white;
+    cursor: pointer;
+    outline: none;
+    transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+
+
+.filter-button:hover {
+    background-color: #f2a600;
+}
+
+/* Theater List Styles */
+.theater-list-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.theater-header {
+    font-size: 24px;
+    font-weight: bold;
+    color: #001A40;
+    margin-bottom: 20px;
+}
+
+.theaters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.theater-card {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: calc(33% - 20px);
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    text-align: center;
+    cursor: pointer;
+    text-decoration: none;
+    color: #333;
+}
+
+.theater-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 12px 20px rgba(0, 0, 0, 0.15);
+}
+
+.theater-card i {
+    font-size: 30px;
+    color: #001A40;
+    margin-bottom: 15px;
+}
+
+.theater-card .theater-name {
     font-size: 18px;
     font-weight: bold;
-    margin-top: 0; /* Hilangkan jarak atas */
-    line-height: 1; /* Atur tinggi garis */
-  }
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.theater-card .theater-location {
+    color: #777;
+    font-size: 14px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .theater-card {
+        width: calc(50% - 20px);
+    }
+}
+
+@media (max-width: 480px) {
+    .theater-card {
+        width: 100%;
+    }
+}

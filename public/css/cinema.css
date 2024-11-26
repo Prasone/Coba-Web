@@ -1,0 +1,142 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+.header {
+    background-color: #001A40;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.judul{
+    padding-right: 65%;
+}
+
+.container-schedule {
+    padding: 20px;
+}
+
+.header .header-schedule {
+    font-size: 28px;
+    font-weight: bold;
+    color: #f5b642; /* Color for the text "SCHEDULE" */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header .header-schedule i {
+    margin-right: 10px; /* Space between the icon and text */
+    color: #F5F5F5; /* Color for the calendar icon */
+}
+
+section {
+    max-width: 800px;
+    margin: 20px auto;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    color: #004d40;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+}
+
+.form-container label {
+    font-weight: bold;
+    color: #004d40;
+}
+
+select, input[type="text"], button {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+select {
+    background-color: #fff;
+    color: #333;
+    min-width: 150px;
+}
+
+input[type="text"] {
+    flex: 1;
+    max-width: 200px;
+}
+
+button {
+    background-color: #004d40;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #00796b;
+}
+
+/* Kotak Cinema dengan Scroll */
+.cinema-container {
+    max-height: 400px; /* Membatasi tinggi maksimal */
+    overflow-y: auto; /* Scroll untuk konten yang melebihi */
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: #fafafa;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+ul li {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+ul li h3 {
+    color: #004d40;
+    margin: 0;
+    font-size: 18px;
+}
+
+ul li p {
+    margin: 0;
+    font-size: 14px;
+    color: #555;
+}
+
+ul li:last-child {
+    border-bottom: none;
+}
+
+ul li a {
+    color: #004d40;
+    text-decoration: none;
+}
+
+ul li a:hover {
+    text-decoration: underline;
+}

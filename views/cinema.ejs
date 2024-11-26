@@ -4,30 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <% title = 'Cinema' %>
+    <link rel="stylesheet" href="/css/cinema.css">
 </head>
 <body>
+    <div class="header">
+        <div class="header-schedule">
+          <i class="fas fa-ticket-alt"></i> CINEMA
+        </div>
+      </div>
+
     <section>
-        <h2>Movie Schedule</h2>
-        <form action="/cinema" method="get">
+        <label class="judul">Pick your location!</label>
+        <form class="form-container" action="/cinema" method="get">
             <label for="city">Select City:</label>
             <select name="city" id="city" onchange="this.form.submit()">
                 <option value="">All Cities</option>
                 <option value="Jakarta" <%= city === 'Jakarta' ? 'selected' : '' %>>Jakarta</option>
                 <option value="Bekasi" <%= city === 'Bekasi' ? 'selected' : '' %>>Bekasi</option>
+                <option value="Depok" <%= city === 'Depok' ? 'selected' : '' %>>Depok</option>
             </select>
+            
+            <label for="search">Search Cinema:</label>
+            <input type="text" id="search" name="search" placeholder="Enter cinema name" value="<%= search || '' %>" />
+            <button type="submit">Search</button>
         </form>
 
-        <ul>
-            <% theaters.forEach(function(theater) { %>
-                <li>
-                    <h3><%= theater.name %></h3>
-                    <p><strong>Address:</strong> <%= theater.location %></p>
-                    <p><strong>Contact:</strong> <%= theater.contact %></p>
-                    <a href="https://www.google.com/maps/search/<%= encodeURIComponent(theater.location) %>" target="_blank">View on Google Maps</a>
-                </li>
-            <% }) %>
-        </ul>
+        <!-- Kotak dengan scroll -->
+        <div class="cinema-container">
+            <ul>
+                <% theaters.forEach(function(theater) { %>
+                    <li>
+                        <h3><%= theater.name %></h3>
+                        <p><strong>Address:</strong> <%= theater.location %></p>
+                        <p><strong>Contact:</strong> <%= theater.contact %></p>
+                        <a href="https://www.google.com/maps/search/<%= encodeURIComponent(theater.location) %>" target="_blank">View on Google Maps</a>
+                    </li>
+                <% }) %>
+            </ul>
+        </div>
     </section>
 </body>
+
 </html>
 
