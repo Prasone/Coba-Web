@@ -402,7 +402,7 @@ app.post('/edit_film/:id', (req, res) => {
             console.error(err);
             return res.status(500).send('Failed to update film');
         }
-        res.redirect('/data-film');
+        res.redirect('/data');
     });
 });
 

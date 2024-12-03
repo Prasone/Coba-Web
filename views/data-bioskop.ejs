@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Data Bioskop</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    
 </head>
 <body>
     <div class="container mt-5">
@@ -27,15 +28,13 @@
                         <td><%= theater.name %></td>
                         <td><%= theater.location %></td>
                         <td><%= theater.city %></td>
-                        <td><%= theater.contact %></td>
-                        <td>
-                            <a href="/edit_bioskop/<%= theater.id %>" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="/delete_bioskop/<%= theater.id %>" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus bioskop ini?');">
+                        <td><%= theater.contact %></td>  
+                        <td class="d-flex">
+                            <a href="/edit_bioskop/<%= theater.id %>" class="btn btn-warning btn-sm me-2">Edit</a>
+                            <form action="/delete_bioskop/<%= theater.id %>" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus jadwal ini?');">
                                 <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                             </form>
-                            
-                        </td>    
-                                        
+                        </td>              
                     </tr>
                 <% }); %>
             </tbody>
